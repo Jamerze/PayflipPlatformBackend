@@ -20,7 +20,7 @@ export class UserService {
     }
 
     async findByLogin({ email, password }: LoginDto): Promise<UserDto> {
-        const user = await this.userModel.findOne({ where: { email } });
+        const user = await this.userModel.findOne({ email: email });
 
         if (!user) {
             throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
@@ -50,10 +50,10 @@ export class UserService {
 
         // check if the user exists in the db    
         const userInDb = await this.userModel.findOne({
-            where: { email }
+            email: email
         });
         if (userInDb) {
-            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+            throw new HttpException('User already exists'+userInDb+"&"+userDto.email, HttpStatus.BAD_REQUEST);
         }
         const newUser = new this.userModel({
             username: username,
