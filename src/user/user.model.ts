@@ -4,9 +4,6 @@ import { Document } from 'mongoose';
 @Schema()
 export class User {
     @Prop({unique: true})
-    id: string;
-
-    @Prop({unique: true})
     username: string;
 
     @Prop({unique: true})
