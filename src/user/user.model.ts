@@ -3,14 +3,26 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class User {
-    @Prop({unique: true})
-    username: string;
+    @Prop()
+    name: string;
+    
+    @Prop()
+    company_name: string;
 
     @Prop({unique: true})
     email: string;
+    
+    @Prop()
+    address: string;
 
     @Prop()
     password: string;
+    
+    @Prop()
+    country: string;
+    
+    @Prop()
+    role: string;
 }
 
 export type UserModel = User & Document

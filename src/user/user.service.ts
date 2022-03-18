@@ -27,10 +27,7 @@ export class UserService {
         }
 
         // compare passwords
-        let areEqual = false;
-        if(password == user.password){
-            areEqual = true;
-        }
+        const areEqual = await bcrypt.compare(password, user.password);
 
         if (!areEqual) {
             throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
@@ -46,7 +43,7 @@ export class UserService {
     }
 
     async create(userDto: CreateDto): Promise<UserDto> {
-        const { username, password, email } = userDto;
+        const { name, company_name, email, address, password, country } = userDto;
 
         // check if the user exists in the db    
         const userInDb = await this.userModel.findOne({
@@ -56,9 +53,11 @@ export class UserService {
             throw new HttpException('User already exists'+userInDb+"&"+userDto.email, HttpStatus.BAD_REQUEST);
         }
         const newUser = new this.userModel({
-            username: username,
+            name: name,
             email: email,
-            password: password,
+            country: country,
+            role: "employer",
+            password: await bcrypt.hash(password, 10),
         })
         await newUser.save();
         return toUserDto(newUser);

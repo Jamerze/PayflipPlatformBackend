@@ -40,8 +40,17 @@ export class AuthService {
         // generate and sign token
         const token = this._createToken(user);
 
+        const userDetail: UserDto = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            country: user.country,
+
+        };
+
         return {
-            username: user.username,
+            user: userDetail,
             ...token,
         };
     }
@@ -54,12 +63,14 @@ export class AuthService {
         return user;
     }
 
-    private _createToken({ username }: UserDto): any {
+    private _createToken({ email }: UserDto): any {
         const expiresIn = process.env.EXPIRESIN;
 
-        const user: JwtPayload = { username };
+        const user: JwtPayload = { email };
         const accessToken = this.jwtService.sign(user);
+        const type = "Bearer";
         return {
+            type,
             expiresIn,
             accessToken,
         };
