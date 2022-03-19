@@ -10,7 +10,7 @@ async function bootstrap() {
   app.enableCors({
     origin: 'https://payflipfrontend.netlify.app'
 });
-  app.listen(process.env.PORT || 3001,'0.0.0.0');
+  await app.listen(process.env.PORT || 3001,'0.0.0.0');
   Logger.log(`Server started running on http://localhost:${process.env.PORT}`, 'Bootstrap');
 }
 bootstrap();
