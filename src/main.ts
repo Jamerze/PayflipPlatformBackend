@@ -6,7 +6,10 @@ import { Logger } from '@nestjs/common';
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule,{cors:true});
+  app.enableCors({
+    origin: 'https://payflipfrontend.netlify.app'
+});
   await app.listen(process.env.PORT);
   Logger.log(`Server started running on http://localhost:${process.env.PORT}`, 'Bootstrap');
 }
