@@ -50,7 +50,7 @@ export class UserService {
             email: email
         });
         if (userInDb) {
-            throw new HttpException('User already exists'+userInDb+"&"+userDto.email, HttpStatus.BAD_REQUEST);
+            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
         }
         const newUser = new this.userModel({
             name: name,
