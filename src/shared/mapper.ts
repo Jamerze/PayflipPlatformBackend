@@ -10,7 +10,7 @@ export const toUserDto = (data: UserModel): UserDto => {
 };
 
 export const toEmployerDto = (data: EmployerModel): EmployerDto => {  
-    const { id, user_id, name, address, country } = data;
-    let employerDto: EmployerDto = { id, user_id, name, address, country };
+    const { id, name, address, country, user } = data;
+    let employerDto: EmployerDto = { id, name, address, country, user: user ? toUserDto(user) : null };
     return employerDto;
 };

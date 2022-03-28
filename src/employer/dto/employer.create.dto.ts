@@ -1,6 +1,8 @@
+import { UserDto } from "src/user/dto/user.dto";
+
 export class EmployerCreateDto {  
-    user_id: string;  
-    name: string;
+    name: string;  
+    contact_name: string;
     address?: string;
     country?: string;
 }

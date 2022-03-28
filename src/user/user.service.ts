@@ -7,10 +7,12 @@ import { UserDto } from './dto/user.dto';
 import { UserModel } from './user.model';
 import * as bcrypt from 'bcrypt';
 import { CreateDto } from './dto/create.dto';
+import { EmployerModel } from 'src/employer/employer.model';
 
 @Injectable()
 export class UserService {
     constructor(
+        @InjectModel("Employer") private employerModel: Model<EmployerModel>,
         @InjectModel("User") private userModel: Model<UserModel>,
     ) { }
 
@@ -58,8 +60,15 @@ export class UserService {
             country: country,
             role: "employer",
             password: await bcrypt.hash(password, 10),
-        })
+        });
         await newUser.save();
+        const newEmployer = new this.employerModel({
+            name: company_name,
+            address: address,
+            country: country,
+            user: toUserDto(newUser)
+        })
+        await newEmployer.save();
         return toUserDto(newUser);
     }
 }

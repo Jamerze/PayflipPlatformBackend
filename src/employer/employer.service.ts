@@ -1,93 +1,148 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { toEmployerDto } from 'src/shared/mapper';
+import { toEmployerDto, toUserDto } from 'src/shared/mapper';
+import { CreateDto } from 'src/user/dto/create.dto';
 import { EmployerCreateDto } from './dto/employer.create.dto';
 import { EmployerDto } from './dto/employer.dto';
 import { EmployerModel } from './employer.model';
+import * as bcrypt from 'bcrypt';
+import { UserModel } from 'src/user/user.model';
 
 @Injectable()
 export class EmployerService {
     constructor(
         @InjectModel("Employer") private employerModel: Model<EmployerModel>,
+        @InjectModel("User") private userModel: Model<UserModel>,
     ) { }
 
-    async getAllEmployer(): Promise<EmployerDto[]> {
-        const employers = await this.employerModel.find();
-        return employers.map(employer => toEmployerDto(employer));
+    async getAllEmployer(): Promise<any> {
+        const employersList = await this.employerModel.find({ relations: ['user'] });
+        let status = {
+            success: true,
+            message: "Data Retreived Successfully.",
+            data: employersList.map(employer => toEmployerDto(employer))
+        }
+        return status;
     }
 
-    async getOneEmployer(id: string): Promise<EmployerDto> {
+    async getOneEmployer(id: string): Promise<any> {
         const employer = await this.employerModel.findOne({
-            where: { id },
+            _id: id,
+            relations: ['user'],
         });
-
-        if (!employer) {
-            throw new HttpException(
-                `Employer list doesn't exist`,
-                HttpStatus.BAD_REQUEST,
-            );
+        let status = {
+            success: true,
+            message: "Data Retreived Successfully.",
+            data: toEmployerDto(employer)
         }
 
-        return toEmployerDto(employer);
+        if (!employer) {
+            status = {
+                success: false,
+                message: "Employer list doesn't exist",
+                data: toEmployerDto(employer)
+            }
+        }
+
+        return status;
     }
 
     async createEmployer(
-        createEmployerDto: EmployerCreateDto
-    ): Promise<EmployerDto> {
-        const { user_id, name, address, country } = createEmployerDto;
-        const newEmployer = new this.employerModel({
-            user_id: user_id,
+        createEmployerDto: CreateDto
+    ): Promise<any> {
+        const { name, company_name, email, address, country, password } = createEmployerDto;
+        const userInDb = await this.userModel.findOne({
+            email: email
+        });
+        let status = {
+            success: true,
+            message: "Employer Created Successfully",
+            data: {}
+        }
+        if (userInDb) {
+            status = {
+                success: false,
+                message: "User Already Exist",
+                data: {}
+            }
+        }
+        const newUser = new this.userModel({
             name: name,
+            email: email,
+            country: country,
+            role: "employer",
+            password: await bcrypt.hash(Math.random().toString(36).slice(-8), 10),
+        });
+        await newUser.save();
+        const newEmployer = new this.employerModel({
+            name: company_name,
             address: address,
-            country: country
+            country: country,
+            user: toUserDto(newUser)
         })
         await newEmployer.save();
-
-        return toEmployerDto(newEmployer);
+        status.data = toEmployerDto(newEmployer);
+        return status;
     }
 
-    async updateEmployer(id: string, employerDto: EmployerDto): Promise<EmployerDto> {
-        const { user_id, name, address, country } = employerDto;
+    async updateEmployer(id: string, employerDto: EmployerDto): Promise<any> {
+        const { name, address, country } = employerDto;
 
         let employer: EmployerModel = await this.employerModel.findOne({
-            where: { id },
+            _id: id,
         });
+        let status = {
+            success: true,
+            message: "Employer Updated Successfully",
+            data: {}
+        }
         if (!employer) {
-            throw new HttpException(
-                `Employer list doesn't exist`,
-                HttpStatus.BAD_REQUEST,
-            );
+            status = {
+                success: false,
+                message: "Employer doesn't exist",
+                data: {}
+            }
         }
 
-        await this.employerModel.updateOne({ id }, {
-            user_id: user_id,
+        await this.employerModel.updateOne({ _id: id }, {
             name: name,
             address: address,
             country: country
         });
 
         employer = await this.employerModel.findOne({
-            where: { id },
-        }); 
-
-        return toEmployerDto(employer);
+            _id: id,
+            relations: ['user'],
+        });
+        status.data = toEmployerDto(employer)
+        return status;
     }
 
-    async destoryEmployer(id: string): Promise<EmployerDto> {
+    async destoryEmployer(id: string): Promise<any> {
         const employer: EmployerModel = await this.employerModel.findOne({
-            where: { id },
+            _id: id,
+            relations: ['user'],
         });
-
-        if (!employer) {
-            throw new HttpException(
-                `Employer list doesn't exist`,
-                HttpStatus.BAD_REQUEST,
-            );
+        let status = {
+            success: true,
+            message: "Employer Deleted Successfully",
+            data: {}
         }
 
-        await this.employerModel.deleteOne({ id });
+        if (!employer) {
+            status = {
+                success: false,
+                message: "Employer list doesn't exist",
+                data: {}
+            }
+        }
 
-        return toEmployerDto(employer);
+        await this.employerModel.deleteOne({
+            _id: id,
+            relations: ['user'],
+        });
+
+        return status;
     }
 }

@@ -11,6 +11,7 @@ import {
     Req,
 } from '@nestjs/common';
 import { toPromise } from 'src/shared/utils';
+import { CreateDto } from 'src/user/dto/create.dto';
 import { EmployerCreateDto } from './dto/employer.create.dto';
 import { EmployerDto } from './dto/employer.dto';
 import { EmployerListDto } from './dto/employer.list.dto';
@@ -20,32 +21,32 @@ import { EmployerService } from './employer.service';
 export class EmployerController {
     constructor(private readonly employerService: EmployerService) { }
 
-    @Get("list")
-    async findAll(): Promise<EmployerListDto> {
+    @Get()
+    async findAll(): Promise<any> {
         const employers = await this.employerService.getAllEmployer();
-        return toPromise({ employers });
+        return employers;
     }
 
-    @Get("detail/:id")
-    async findOne(@Param("id") id: string): Promise<EmployerDto> {
+    @Get(":id")
+    async findOne(@Param("id") id: string): Promise<any> {
         return await this.employerService.getOneEmployer(id);
     }
 
-    @Post('create')
-    async create(@Body() employerCreateDto: EmployerCreateDto): Promise<EmployerDto> {
+    @Post()
+    async create(@Body() employerCreateDto: CreateDto): Promise<any> {
         return await this.employerService.createEmployer(employerCreateDto);
     }
 
-    @Put("update/:id")
+    @Put(":id")
     async update(
         @Param("id") id: string,
         @Body() employerDto: EmployerDto
-    ): Promise<EmployerDto> {
+    ): Promise<any> {
         return await this.employerService.updateEmployer(id, employerDto);
     }
 
-    @Delete("delete/:id")
-    async destory(@Param("id") id: string): Promise<EmployerDto> {
+    @Delete(":id")
+    async destory(@Param("id") id: string): Promise<any> {
         return await this.employerService.destoryEmployer(id);
     }
 }
