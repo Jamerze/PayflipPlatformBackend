@@ -40,9 +40,10 @@ export class EmployerService {
         if (!employer) {
             status = {
                 success: false,
-                message: "Employer list doesn't exist",
+                message: "Employer doesn't exist",
                 data: toEmployerDto(employer)
             }
+            return status;
         }
 
         return status;
@@ -66,6 +67,7 @@ export class EmployerService {
                 message: "User Already Exist",
                 data: {}
             }
+            return status;
         }
         const newUser = new this.userModel({
             name: name,
@@ -103,6 +105,7 @@ export class EmployerService {
                 message: "Employer doesn't exist",
                 data: {}
             }
+            return status;
         }
 
         await this.employerModel.updateOne({ _id: id }, {
@@ -133,14 +136,18 @@ export class EmployerService {
         if (!employer) {
             status = {
                 success: false,
-                message: "Employer list doesn't exist",
+                message: "Employer doesn't exist",
                 data: {}
             }
+            return status;
         }
 
         await this.employerModel.deleteOne({
             _id: id,
             relations: ['user'],
+        });
+        await this.userModel.deleteOne({
+            email: employer.user.email,
         });
 
         return status;
