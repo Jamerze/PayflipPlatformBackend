@@ -24,26 +24,20 @@ export class AuthController {
     @Post('register')
     public async register(
         @Body() createUserDto: CreateDto,
-    ): Promise<RegistrationStatus> {
-        const result: RegistrationStatus = await this.authService.register(
+    ): Promise<any> {
+        return await this.authService.register(
             createUserDto,
         );
-
-        if (!result.success) {
-            throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
-        }
-
-        return result;
     }
 
     @Post('login')
-    public async login(@Body() loginUserDto: LoginDto): Promise<LoginStatus> {
+    public async login(@Body() loginUserDto: LoginDto): Promise<any> {
         return await this.authService.login(loginUserDto);
     }
 
     @Get('whoami')
     @UseGuards(AuthGuard())
-    public async testAuth(@Req() req: any): Promise<JwtPayload> {
+    public async testAuth(@Req() req: any): Promise<any> {
         return req.user;
     }
 }

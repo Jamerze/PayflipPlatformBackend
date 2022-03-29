@@ -15,52 +15,62 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) { }
 
-    async register(userDto: CreateDto): Promise<RegistrationStatus> {
-        let status: RegistrationStatus = {
-            success: true,
-            message: 'user registered',
-        };
-
-        try {
-            await this.userService.create(userDto);
-        } catch (err) {
-            status = {
-                success: false,
-                message: err,
-            };
-        }
-
+    async register(userDto: CreateDto): Promise<any> {
+        let status : any;
+        status = await this.userService.create(userDto);
         return status;
     }
 
-    async login(loginUserDto: LoginDto): Promise<LoginStatus> {
+    async login(loginUserDto: LoginDto): Promise<any> {
         // find user in db
-        const user = await this.userService.findByLogin(loginUserDto);
-
+        let status = {
+            success : false,
+            message : "",
+            data : {
+                user : {},
+                token : {}
+            }
+        };
+        const userStatus = await this.userService.findByLogin(loginUserDto);
+        if(!userStatus.success){
+            return userStatus;
+        }
         // generate and sign token
-        const token = this._createToken(user);
+        const token = this._createToken(userStatus);
 
         const userDetail: UserDto = {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            country: user.country,
+            id: userStatus.data.id,
+            name: userStatus.data.name,
+            email: userStatus.data.email,
+            role: userStatus.data.role,
+            country: userStatus.data.country,
 
         };
-
-        return {
-            user: userDetail,
-            ...token,
-        };
+        status.success = userStatus.success;
+        status.message = userStatus.message;
+        status.data.user = userDetail;
+        status.data.token = token;
+        return status;
     }
 
-    async validateUser(payload: JwtPayload): Promise<UserDto> {
+    async validateUser(payload: JwtPayload): Promise<any> {
         const user = await this.userService.findByPayload(payload);
+        let status = {
+            success : false,
+            message : "",
+            data : {}
+        };
         if (!user) {
-            throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+            status.message = "Invalid token";
+            return status;
         }
-        return user;
+        else{
+            status.success = true;
+            status.message = "Invalid token";
+            status.data = user;
+
+        }
+        return status;
     }
 
     private _createToken({ email }: UserDto): any {

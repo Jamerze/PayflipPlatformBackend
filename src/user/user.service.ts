@@ -16,43 +16,61 @@ export class UserService {
         @InjectModel("User") private userModel: Model<UserModel>,
     ) { }
 
-    async findOne(options?: object): Promise<UserDto> {
+    async findOne(options?: object): Promise<any> {
         const user = await this.userModel.findOne(options);
         return toUserDto(user);
     }
 
-    async findByLogin({ email, password }: LoginDto): Promise<UserDto> {
+    async findByLogin({ email, password }: LoginDto): Promise<any> {
         const user = await this.userModel.findOne({ email: email });
 
+        let status = {
+            success : false,
+            message : "",
+            data : {}
+        };
         if (!user) {
-            throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+            status.success = false;
+            status.message = "User not found"
+            return status;
         }
 
         // compare passwords
         const areEqual = await bcrypt.compare(password, user.password);
 
         if (!areEqual) {
-            throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+            status.success = false;
+            status.message = "Invalid credentials"
+            return status;
         }
-
-        return toUserDto(user);
+        
+        status.success = true;
+        status.message = "User LoggedIn Successfully";
+        status.data = toUserDto(user);
+        return status;
     }
 
-    async findByPayload({ email }: any): Promise<UserDto> {
+    async findByPayload({ email }: any): Promise<any> {
         return await this.findOne({
             where: { email }
         });
     }
 
-    async create(userDto: CreateDto): Promise<UserDto> {
+    async create(userDto: CreateDto): Promise<any> {
         const { name, company_name, email, address, password, country } = userDto;
 
         // check if the user exists in the db    
         const userInDb = await this.userModel.findOne({
             email: email
         });
+        let status = {
+            success : false,
+            message : "",
+            data : {}
+        };
         if (userInDb) {
-            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+            status.message = "User already exists"
+            return status;
         }
         const newUser = new this.userModel({
             name: name,
@@ -69,6 +87,9 @@ export class UserService {
             user: toUserDto(newUser)
         })
         await newEmployer.save();
-        return toUserDto(newUser);
+        status.success = true;
+        status.message = "User registered successfully";
+        status.data  = toUserDto(newUser);
+        return status;
     }
 }
