@@ -27,25 +27,31 @@ export class EmployerService {
     }
 
     async getOneEmployer(id: string): Promise<any> {
+        let status = {
+            success: false,
+            message: "",
+            data: {}
+        }
+        if (!id || id == "") {
+            status.message = "ID is missing."
+        }
+        if (status.message != "") {
+            return status;
+        }
+
         const employer = await this.employerModel.findOne({
             _id: id,
             relations: ['user'],
         });
-        let status = {
+        if (!employer) {
+            status.message = "Employer doesn't exist";
+            return status;
+        }
+        status = {
             success: true,
             message: "Data Retreived Successfully.",
             data: toEmployerDto(employer)
         }
-
-        if (!employer) {
-            status = {
-                success: false,
-                message: "Employer doesn't exist",
-                data: toEmployerDto(employer)
-            }
-            return status;
-        }
-
         return status;
     }
 
@@ -53,20 +59,39 @@ export class EmployerService {
         createEmployerDto: CreateDto
     ): Promise<any> {
         const { name, company_name, email, address, country, password } = createEmployerDto;
+        let status = {
+            success: false,
+            message: "",
+            data: {}
+        };
+
+        if (!name || name == "") {
+            status.message = "Name is required."
+        }
+        else if (!company_name || company_name == "") {
+            status.message = "Company Name is required."
+        }
+        else if (!email || email == "") {
+            status.message = "Email is required."
+        }
+        else if (!address || address == "") {
+            status.message = "Address is required."
+        }
+        else if (!country || country == "") {
+            status.message = "Country is required."
+        }
+        else if (!email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+            status.message = "Email is not valid."
+        }
+
+        if (status.message != "") {
+            return status;
+        }
         const userInDb = await this.userModel.findOne({
             email: email
         });
-        let status = {
-            success: true,
-            message: "Employer Created Successfully",
-            data: {}
-        }
         if (userInDb) {
-            status = {
-                success: false,
-                message: "User Already Exist",
-                data: {}
-            }
+            status.message = "User Already Exist";
             return status;
         }
         const newUser = new this.userModel({
@@ -84,6 +109,8 @@ export class EmployerService {
             user: toUserDto(newUser)
         })
         await newEmployer.save();
+        status.success = true;
+        status.message = "Employer Created Successfully";
         status.data = toEmployerDto(newEmployer);
         return status;
     }
@@ -91,20 +118,31 @@ export class EmployerService {
     async updateEmployer(id: string, employerDto: EmployerDto): Promise<any> {
         const { name, address, country } = employerDto;
 
+        let status = {
+            success: false,
+            message: "",
+            data: {}
+        }
+        if (!id || id == "") {
+            status.message = "ID is missing."
+        }
+        else if (!name || name == "") {
+            status.message = "Name is required."
+        }
+        else if (!address || address == "") {
+            status.message = "Address is required."
+        }
+        else if (!country || country == "") {
+            status.message = "Country is required."
+        }
+        if (status.message != "") {
+            return status;
+        }
         let employer: EmployerModel = await this.employerModel.findOne({
             _id: id,
         });
-        let status = {
-            success: true,
-            message: "Employer Updated Successfully",
-            data: {}
-        }
         if (!employer) {
-            status = {
-                success: false,
-                message: "Employer doesn't exist",
-                data: {}
-            }
+            status.message = "Employer doesn't exist";
             return status;
         }
 
@@ -118,27 +156,30 @@ export class EmployerService {
             _id: id,
             relations: ['user'],
         });
+        status.success = true;
+        status.message = "Employer Updated Successfully";
         status.data = toEmployerDto(employer)
         return status;
     }
 
     async destoryEmployer(id: string): Promise<any> {
+        let status = {
+            success: false,
+            message: "",
+            data: {}
+        }
+        if (!id || id == "") {
+            status.message = "ID is missing."
+        }
+        if (status.message != "") {
+            return status;
+        }
         const employer: EmployerModel = await this.employerModel.findOne({
             _id: id,
             relations: ['user'],
         });
-        let status = {
-            success: true,
-            message: "Employer Deleted Successfully",
-            data: {}
-        }
-
         if (!employer) {
-            status = {
-                success: false,
-                message: "Employer doesn't exist",
-                data: {}
-            }
+            status.message = "Employer doesn't exist";
             return status;
         }
 
@@ -149,7 +190,8 @@ export class EmployerService {
         await this.userModel.deleteOne({
             email: employer.user.email,
         });
-
+        status.success = true;
+        status.message = "Employer Deleted Successfully";
         return status;
     }
 }
