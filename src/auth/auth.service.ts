@@ -16,7 +16,7 @@ export class AuthService {
     ) { }
 
     async register(userDto: CreateDto): Promise<any> {
-        let status : any;
+        let status: any;
         status = await this.userService.create(userDto);
         return status;
     }
@@ -24,15 +24,15 @@ export class AuthService {
     async login(loginUserDto: LoginDto): Promise<any> {
         // find user in db
         let status = {
-            success : false,
-            message : "",
-            data : {
-                user : {},
-                token : {}
+            success: false,
+            message: "",
+            data: {
+                user: {},
+                token: {}
             }
         };
         const userStatus = await this.userService.findByLogin(loginUserDto);
-        if(!userStatus.success){
+        if (!userStatus.success) {
             return userStatus;
         }
         // generate and sign token
@@ -56,20 +56,17 @@ export class AuthService {
     async validateUser(payload: JwtPayload): Promise<any> {
         const user = await this.userService.findByPayload(payload);
         let status = {
-            success : false,
-            message : "",
-            data : {}
+            success: false,
+            message: "",
+            data: {}
         };
         if (!user) {
-            status.message = "Invalid token";
+            status.message = "Unauthorized";
             return status;
         }
-        else{
-            status.success = true;
-            status.message = "Invalid token";
-            status.data = user;
-
-        }
+        status.success = true;
+        status.message = "User retreived successfully";
+        status.data = user;
         return status;
     }
 

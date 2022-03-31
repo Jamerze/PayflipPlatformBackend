@@ -64,7 +64,7 @@ export class UserService {
 
     async findByPayload({ email }: any): Promise<any> {
         return await this.findOne({
-            where: { email }
+            email: email
         });
     }
 

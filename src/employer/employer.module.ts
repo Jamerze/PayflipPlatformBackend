@@ -4,6 +4,8 @@ import { EmployerService } from './employer.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EmployerSchema } from './employer.model';
 import { UserSchema } from 'src/user/user.model';
+import { UserModule } from 'src/user/user.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -16,7 +18,9 @@ import { UserSchema } from 'src/user/user.model';
         name: "User",
         schema: UserSchema
       }]
-    )
+    ),
+    UserModule,
+    AuthModule,
   ],
   controllers: [EmployerController],
   providers: [EmployerService]

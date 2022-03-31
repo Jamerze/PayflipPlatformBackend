@@ -16,6 +16,7 @@ import { AuthService } from './auth.service';
 import { LoginStatus } from './interfaces/login.interface';
 import { JwtPayload } from './interfaces/payload.interface';
 import { RegistrationStatus } from './interfaces/registration.interface';
+import { JwtAuthGuard } from './jwt-auth-guard';
 
 @Controller('auth')
 export class AuthController {
@@ -35,8 +36,8 @@ export class AuthController {
         return await this.authService.login(loginUserDto);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get('whoami')
-    @UseGuards(AuthGuard())
     public async testAuth(@Req() req: any): Promise<any> {
         return req.user;
     }
