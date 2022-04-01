@@ -14,28 +14,3 @@ export const toEmployerDto = (data: EmployerModel): EmployerDto => {
     let employerDto: EmployerDto = { id, name, address, country, user: user ? toUserDto(user) : null };
     return employerDto;
 };
-
-export const isAdmin = (req: any) => {
-    if (req.user.role == "admin") {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-export const isEmployer = (req: any) => {
-    if (req.user.role == "employer") {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-export const isEmployee = (req: any) => {
-    if (req.user.role == "employee") {
-        return true;
-    }
-    else {
-        return false;
-    }
-}

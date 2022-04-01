@@ -11,7 +11,7 @@ import {
     Req,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
-import { isAdmin } from 'src/shared/mapper';
+import { isAdmin, notAuthorize } from 'src/shared/common-function';
 import { CreateDto } from 'src/user/dto/create.dto';
 import { EmployerDto } from './dto/employer.dto';
 import { EmployerService } from './employer.service';
@@ -28,10 +28,9 @@ export class EmployerController {
         @Req() req: any
     ): Promise<any> {
         if (!isAdmin(req)) {
-            return this.notAuthorize();
+            return notAuthorize();
         }
-        const employers = await this.employerService.getAllEmployer();
-        return employers;
+        return await this.employerService.getAllEmployer();
     }
 
     @UseGuards(JwtAuthGuard)
@@ -41,7 +40,7 @@ export class EmployerController {
         @Param("id") id: string
     ): Promise<any> {
         if (!isAdmin(req)) {
-            return this.notAuthorize();
+            return notAuthorize();
         }
         return await this.employerService.getOneEmployer(id);
     }
@@ -53,7 +52,7 @@ export class EmployerController {
         @Body() employerCreateDto: CreateDto
     ): Promise<any> {
         if (!isAdmin(req)) {
-            return this.notAuthorize();
+            return notAuthorize();
         }
         return await this.employerService.createEmployer(employerCreateDto);
     }
@@ -66,7 +65,7 @@ export class EmployerController {
         @Body() employerDto: EmployerDto
     ): Promise<any> {
         if (!isAdmin(req)) {
-            return this.notAuthorize();
+            return notAuthorize();
         }
         return await this.employerService.updateEmployer(id, employerDto);
     }
@@ -78,16 +77,8 @@ export class EmployerController {
         @Param("id") id: string
     ): Promise<any> {
         if (!isAdmin(req)) {
-            return this.notAuthorize();
+            return notAuthorize();
         }
         return await this.employerService.destoryEmployer(id);
-    }
-
-    private async notAuthorize() {
-        let status = {
-            success: false,
-            message: "You are not authorized to access this request."
-        };
-        return status;
     }
 }
