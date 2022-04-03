@@ -1,5 +1,5 @@
 export const isAdmin = (req: any) => {
-    if (req.user.role == "admin") {
+    if (req && req.user.data.role == "admin") {
         return true;
     }
     else {
@@ -8,7 +8,7 @@ export const isAdmin = (req: any) => {
 }
 
 export const isEmployer = (req: any) => {
-    if (req.user.role == "employer") {
+    if (req && req.user.data.role == "employer") {
         return true;
     }
     else {
@@ -17,7 +17,7 @@ export const isEmployer = (req: any) => {
 }
 
 export const isEmployee = (req: any) => {
-    if (req.user.role == "employee") {
+    if (req && req.user.data.role == "employee") {
         return true;
     }
     else {

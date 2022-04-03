@@ -5,13 +5,15 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { EmployerModule } from './employer/employer.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb+srv://payflipmobility:BlendedDatabaseAccount_2022@payflipcluster.nrost.mongodb.net/payflipdb?retryWrites=true&w=majority'),
     UserModule,
     AuthModule,
-    EmployerModule
+    EmployerModule,
+    DashboardModule
   ],
   controllers: [AppController],
   providers: [AppService],
