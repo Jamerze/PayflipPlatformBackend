@@ -26,10 +26,13 @@ export class EmployerService {
         if (!id || id == "") {
             return responseWithoutData(false, "ID is missing.");
         }
-        const employer = await this.employerModel.findOne({
-            _id: id,
-            relations: ['user'],
-        });
+        let employer;  
+        try {
+            employer = await this.employerModel.findById(id);
+        }
+        catch (err){
+            return responseWithoutData(false, "Employer doesn't exist");
+        }
         if (!employer) {
             return responseWithoutData(false, "Employer doesn't exist");
         }
@@ -43,7 +46,7 @@ export class EmployerService {
         let validation = checkRegistrationValidation(createEmployerDto);
         if (!validation.success) {
             return validation;
-        } 
+        }
         const userInDb = await this.userModel.findOne({
             email: email
         });
@@ -73,10 +76,14 @@ export class EmployerService {
         let validation = checkUpdateEmployeeValidation(id, employerDto);
         if (!validation.success) {
             return validation;
-        } 
-        let employer: EmployerModel = await this.employerModel.findOne({
-            _id: id,
-        });
+        }
+        let employer;  
+        try {
+            employer = await this.employerModel.findById(id);
+        }
+        catch (err){
+            return responseWithoutData(false, "Employer doesn't exist");
+        }
         if (!employer) {
             return responseWithoutData(false, "Employer doesn't exist");
         }
@@ -86,10 +93,12 @@ export class EmployerService {
             country: country
         });
 
-        employer = await this.employerModel.findOne({
-            _id: id,
-            relations: ['user'],
+        await this.userModel.updateOne({
+            _id: employer.user.id
+        }, {
+            country: country
         });
+        employer = await this.employerModel.findById(id);
         return responseWithData(true, "Employer Updated Successfully", toEmployerDto(employer));
     }
 
@@ -97,10 +106,13 @@ export class EmployerService {
         if (!id || id == "") {
             return responseWithoutData(false, "ID is missing.");
         }
-        const employer: EmployerModel = await this.employerModel.findOne({
-            _id: id,
-            relations: ['user'],
-        });
+        let employer;  
+        try {
+            employer = await this.employerModel.findById(id);
+        }
+        catch (err){
+            return responseWithoutData(false, "Employer doesn't exist");
+        }
         if (!employer) {
             return responseWithoutData(false, "Employer doesn't exist");
         }
