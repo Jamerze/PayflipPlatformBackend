@@ -52,7 +52,7 @@ export class EmployeeService {
         if (!employee) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
-        if (employee && employee.employer_id != req.user.data.id) {
+        if (isEmployer(req) && employee && employee.employer_id != req.user.data.id) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         return responseWithData(true, "Data Retreived Successfully.", toEmployeeDto(employee));
@@ -136,7 +136,7 @@ export class EmployeeService {
         if (!employee) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
-        if (employee && employee.employer_id != req.user.data.id) {
+        if (isEmployer(req) && employee && employee.employer_id != req.user.data.id) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         await this.employeeModel.updateOne({ _id: id }, {
@@ -174,7 +174,7 @@ export class EmployeeService {
         if (!employee) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
-        if (employee && employee.employer_id != req.user.data.id) {
+        if (isEmployer(req) && employee && employee.employer_id != req.user.data.id) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         await this.employeeModel.deleteOne({
