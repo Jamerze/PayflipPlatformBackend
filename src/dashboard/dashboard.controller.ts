@@ -14,6 +14,9 @@ export class DashboardController {
     async dashboard(
         @Req() req: any,
     ): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
         if (isAdmin(req)) {
             return await this.dashboardService.getAdminDashboard();
         } else if (isEmployer(req)) {

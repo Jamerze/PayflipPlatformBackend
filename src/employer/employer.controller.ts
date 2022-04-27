@@ -27,6 +27,9 @@ export class EmployerController {
     async findAll(
         @Req() req: any
     ): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
         if (!isAdmin(req)) {
             return notAuthorize();
         }
@@ -39,6 +42,9 @@ export class EmployerController {
         @Req() req: any,
         @Param("id") id: string
     ): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
         if (!isAdmin(req)) {
             return notAuthorize();
         }
@@ -51,6 +57,9 @@ export class EmployerController {
         @Req() req: any,
         @Body() employerCreateDto: CreateDto
     ): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
         if (!isAdmin(req)) {
             return notAuthorize();
         }
@@ -64,6 +73,9 @@ export class EmployerController {
         @Param("id") id: string,
         @Body() employerDto: EmployerDto
     ): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
         if (!isAdmin(req)) {
             return notAuthorize();
         }
@@ -76,6 +88,9 @@ export class EmployerController {
         @Req() req: any,
         @Param("id") id: string
     ): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
         if (!isAdmin(req)) {
             return notAuthorize();
         }

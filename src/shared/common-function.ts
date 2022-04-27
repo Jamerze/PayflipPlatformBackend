@@ -182,3 +182,44 @@ export const checkEmployeeUpdationValidation = (id: any, employee: any) => {
         return responseWithoutData(true, "Data Validated");
     }
 }
+
+export const checkBenefitValidation = (data: any) => {
+    const { name, cost, country, description } = data;
+    if (!name || name == "") {
+        return responseWithoutData(false, "Name is required");
+    }
+    else if (!cost || cost == "") {
+        return responseWithoutData(false, "Cost is required.");
+    }
+    else if (!country || country == "") {
+        return responseWithoutData(false, "Country is required.");
+    }
+    else if (!description || description == "") {
+        return responseWithoutData(false, "Description is required.");
+    }
+    else {
+        return responseWithoutData(true, "Data Validated");
+    }
+}
+
+export const checkBenefitUpdationValidation = (id: any, data: any) => {
+    const { name, cost, country, description } = data;
+    if (!id || id == "") {
+        return responseWithoutData(false, "ID is missing");
+    }
+    if (!name || name == "") {
+        return responseWithoutData(false, "Name is required");
+    }
+    else if (!cost || cost == "") {
+        return responseWithoutData(false, "Cost is required.");
+    }
+    else if (!country || country == "") {
+        return responseWithoutData(false, "Country is required.");
+    }
+    else if (!description || description == "") {
+        return responseWithoutData(false, "Description is required.");
+    }
+    else {
+        return responseWithoutData(true, "Data Validated");
+    }
+}

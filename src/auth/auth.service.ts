@@ -34,7 +34,15 @@ export class AuthService {
         }
         return responseWithData(true, "User retreived successfully", user);
     }
-    
+
+    async refreshToken(req: any): Promise<any> {
+        const token = this._createToken(req.user.data);
+        return responseWithData(true, "Token Refreshed Successfully", {user: req.user.data, token: token});
+    }
+
+    async validate(req: any): Promise<any> {
+        return responseWithoutData(true, "Authorized");
+    }
 
     private _createToken({ email }: UserDto): any {
         const expiresIn = process.env.EXPIRESIN;

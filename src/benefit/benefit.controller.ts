@@ -1,15 +1,14 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
-import { isAdmin, isEmployer, notAuthorize } from 'src/shared/common-function';
-import { CreateDto } from 'src/user/dto/create.dto';
-import { EmployeeCreateDto } from './dto/employee-create.dto';
-import { EmployeeDto } from './dto/employee.dto';
-import { EmployeeService } from './employee.service';
+import { isAdmin, notAuthorize } from 'src/shared/common-function';
+import { BenefitService } from './benefit.service';
+import { BenefitCreateDto } from './dto/benefit.create.dto';
+import { BenefitDto } from './dto/benefit.dto';
 
-@Controller('employee')
-export class EmployeeController {
+@Controller('benefit')
+export class BenefitController {
     constructor(
-        private readonly employeeService: EmployeeService,
+        private readonly benefitService: BenefitService,
     ) { }
 
     @UseGuards(JwtAuthGuard)
@@ -20,10 +19,10 @@ export class EmployeeController {
         if(req.user.success == false){
             return req.user;
         }
-        if (!isAdmin(req) && !isEmployer(req)) {
+        if (!isAdmin(req)) {
             return notAuthorize();
         }
-        return await this.employeeService.getAllEmployee(req);
+        return await this.benefitService.getAllBenefits();
     }
 
     @UseGuards(JwtAuthGuard)
@@ -35,25 +34,25 @@ export class EmployeeController {
         if(req.user.success == false){
             return req.user;
         }
-        if (!isAdmin(req) && !isEmployer(req)) {
+        if (!isAdmin(req)) {
             return notAuthorize();
         }
-        return await this.employeeService.getOneEmployee(req, id);
+        return await this.benefitService.getOneBenefit(id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Post()
     async create(
         @Req() req: any,
-        @Body() employeeCreateDto: EmployeeCreateDto
+        @Body() benefitCreateDto: BenefitCreateDto
     ): Promise<any> {
         if(req.user.success == false){
             return req.user;
         }
-        if (!isAdmin(req) && !isEmployer(req)) {
+        if (!isAdmin(req)) {
             return notAuthorize();
         }
-        return await this.employeeService.createEmployee(req, employeeCreateDto);
+        return await this.benefitService.createBenefit(benefitCreateDto);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -61,15 +60,15 @@ export class EmployeeController {
     async update(
         @Req() req: any,
         @Param("id") id: string,
-        @Body() employeeDto: EmployeeDto
+        @Body() benefitDto: BenefitDto
     ): Promise<any> {
         if(req.user.success == false){
             return req.user;
         }
-        if (!isAdmin(req) && !isEmployer(req)) {
+        if (!isAdmin(req)) {
             return notAuthorize();
         }
-        return await this.employeeService.updateEmployee(req, id, employeeDto);
+        return await this.benefitService.updateBenefit(id, benefitDto);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -81,9 +80,9 @@ export class EmployeeController {
         if(req.user.success == false){
             return req.user;
         }
-        if (!isAdmin(req) && !isEmployer(req)) {
+        if (!isAdmin(req)) {
             return notAuthorize();
         }
-        return await this.employeeService.destoryEmployee(req, id);
+        return await this.benefitService.destoryBenefit(id);
     }
 }

@@ -1,3 +1,5 @@
+import { BenefitModel } from "src/benefit/benefit.model";
+import { BenefitDto } from "src/benefit/dto/benefit.dto";
 import { EmployeeDto } from "src/employee/dto/employee.dto";
 import { EmployeeModel } from "src/employee/employee.model";
 import { EmployerDto } from "src/employer/dto/employer.dto";
@@ -21,4 +23,10 @@ export const toEmployeeDto = (data: EmployeeModel): EmployeeDto => {
     const { id, name, employer_id, designation, employement_type, address, country, user } = data;
     let employeeDto: EmployeeDto = { id, name, employer_id, designation, employement_type, address, country, user: user ? toUserDto(user) : null };
     return employeeDto;
+};
+
+export const toBenefitDto = (data: BenefitModel): BenefitDto => {
+    const { id, name, cost, country, description } = data;
+    let benefitDto: BenefitDto = { id, name, cost, country, description };
+    return benefitDto;
 };
