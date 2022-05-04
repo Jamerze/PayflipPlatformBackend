@@ -8,6 +8,7 @@ import { EmployerModule } from './employer/employer.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { EmployeeModule } from './employee/employee.module';
 import { BenefitModule } from './benefit/benefit.module';
+import { EmployerBenefitModule } from './employer-benefit/employer-benefit.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { BenefitModule } from './benefit/benefit.module';
     EmployerModule,
     DashboardModule,
     EmployeeModule,
-    BenefitModule
+    BenefitModule,
+    EmployerBenefitModule
   ],
   controllers: [AppController],
   providers: [AppService],

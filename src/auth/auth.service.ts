@@ -44,6 +44,10 @@ export class AuthService {
         return responseWithoutData(true, "Authorized");
     }
 
+    async getRole(req: any): Promise<any> {
+        return responseWithData(true, "Role retreived successfuly", req.user.data.role);
+    }
+
     private _createToken({ email }: UserDto): any {
         const expiresIn = process.env.EXPIRESIN;
         const user: JwtPayload = { email };

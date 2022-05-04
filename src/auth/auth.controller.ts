@@ -52,4 +52,13 @@ export class AuthController {
         }
         return await this.authService.validate(req);
     }
+
+    @Get('role')
+    @UseGuards(JwtAuthGuard)
+    public async role(@Req() req: any): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
+        return await this.authService.getRole(req);
+    }
 }
