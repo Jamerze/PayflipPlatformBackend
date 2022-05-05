@@ -48,6 +48,18 @@ export class AuthService {
         return responseWithData(true, "Role retreived successfuly", req.user.data.role);
     }
 
+    async getProfile(req: any): Promise<any> {
+        return responseWithData(true, "Profile retreived successfuly", req.user.data);
+    }
+
+    async updateProfile(req: any, userDto: CreateDto): Promise<any> {
+        return await this.userService.update(req, userDto);
+    }
+
+    async updatePassword(req: any, passwordData: any): Promise<any> {
+        return await this.userService.updatePassword(req, passwordData);
+    }
+
     private _createToken({ email }: UserDto): any {
         const expiresIn = process.env.EXPIRESIN;
         const user: JwtPayload = { email };

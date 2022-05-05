@@ -99,6 +99,38 @@ export const checkRegistrationValidation = (user: any) => {
     }
 }
 
+export const checkUpdateProfileValidation = (user: any) => {
+    const { name, country } = user;
+    if (!name || name == "") {
+        return responseWithoutData(false, "Name is required");
+    }
+    else if (!country || country == "") {
+        return responseWithoutData(false, "Country is required.");
+    }
+    else {
+        return responseWithoutData(true, "Data Validated");
+    }
+}
+
+export const checkPasswordUpdateValidation = (user: any) => {
+    const { new_password, confirm_new_password } = user;
+    if (!new_password || new_password == "") {
+        return responseWithoutData(false, "New Password is required.");
+    }
+    else if (new_password.length < 8) {
+        return responseWithoutData(false, "New Password length should be atleast 8.");
+    }
+    else if (!confirm_new_password || confirm_new_password == "") {
+        return responseWithoutData(false, "Confirm New Password is required.");
+    }
+    else if (confirm_new_password.length < 8) {
+        return responseWithoutData(false, "Confirm New Password length should be atleast 8.");
+    }
+    else {
+        return responseWithoutData(true, "Data Validated");
+    }
+}
+
 export const checkUpdateEmployeeValidation = (id: any, employer: any) => {
     const { name, address, country } = employer;
     if (!id || id == "") {

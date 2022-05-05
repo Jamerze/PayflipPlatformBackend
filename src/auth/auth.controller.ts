@@ -5,6 +5,7 @@ import {
     Get,
     Req,
     UseGuards,
+    Put,
 } from '@nestjs/common';
 import { CreateDto } from 'src/user/dto/create.dto';
 import { LoginDto } from 'src/user/dto/login.dto';
@@ -60,5 +61,32 @@ export class AuthController {
             return req.user;
         }
         return await this.authService.getRole(req);
+    }
+
+    @Get('profile')
+    @UseGuards(JwtAuthGuard)
+    public async profile(@Req() req: any): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
+        return await this.authService.getProfile(req);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Put("updateProfile")
+    public async updateProfile(@Req() req: any, @Body() createUserDto: CreateDto): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
+        return await this.authService.updateProfile(req, createUserDto);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Put("updatePassword")
+    public async updatePassword(@Req() req: any, @Body() passwords: any): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
+        return await this.authService.updatePassword(req, passwords);
     }
 }
