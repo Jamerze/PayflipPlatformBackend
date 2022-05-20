@@ -6,6 +6,7 @@ import { EmployerSchema } from './employer.model';
 import { UserSchema } from 'src/user/user.model';
 import { UserModule } from 'src/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { EmployeeSchema } from 'src/employee/employee.model';
 
 @Module({
   imports: [
@@ -17,6 +18,10 @@ import { AuthModule } from 'src/auth/auth.module';
       {
         name: "User",
         schema: UserSchema
+      },
+      {
+        name: "Employee",
+        schema: EmployeeSchema
       }]
     ),
     UserModule,

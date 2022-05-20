@@ -9,12 +9,14 @@ import { EmployerModel } from './employer.model';
 import * as bcrypt from 'bcrypt';
 import { UserModel } from 'src/user/user.model';
 import { checkRegistrationValidation, checkUpdateEmployeeValidation, responseWithData, responseWithoutData } from 'src/shared/common-function';
+import { EmployeeModel } from 'src/employee/employee.model';
 
 @Injectable()
 export class EmployerService {
     constructor(
         @InjectModel("Employer") private employerModel: Model<EmployerModel>,
         @InjectModel("User") private userModel: Model<UserModel>,
+        @InjectModel("Employee") private employeeModel: Model<EmployeeModel>,
     ) { }
 
     async getAllEmployer(): Promise<any> {
@@ -97,6 +99,9 @@ export class EmployerService {
             _id: employer.user.id
         }, {
             country: country
+        });
+        await this.employeeModel.updateMany({ employer_id: id }, {
+            employer_name: name,
         });
         employer = await this.employerModel.findById(id);
         return responseWithData(true, "Employer Updated Successfully", toEmployerDto(employer));

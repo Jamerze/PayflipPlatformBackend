@@ -4,6 +4,7 @@ export class EmployeeDto {
     id: string;
     name: string;
     employer_id: string;
+    employer_name: string;
     designation: string;
     employement_type: string;
     address?: string;

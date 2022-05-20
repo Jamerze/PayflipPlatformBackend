@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from 'mongoose';
 import { Exclude, Transform, Type } from 'class-transformer';
 import { User, UserModel, UserSchema } from "src/user/user.model";
+import { Employer, EmployerModel, EmployerSchema } from "src/employer/employer.model";
 
 @Schema()
 export class Employee {
@@ -10,6 +11,9 @@ export class Employee {
 
     @Prop()
     employer_id: string;
+    
+    @Prop()
+    employer_name: string;
 
     @Prop()
     designation: string;

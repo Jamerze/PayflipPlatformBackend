@@ -78,7 +78,7 @@ export class EmployeeService {
         }
         let employer;  
         try {
-            employer = await this.employerModel.find({_id: employer_id});
+            employer = await this.employerModel.findOne({_id: employer_id});
         }
         catch (err){
             return responseWithoutData(false, "Employer doesn't exist zain");
@@ -99,6 +99,7 @@ export class EmployeeService {
             designation: designation,
             employement_type: employement_type,
             employer_id: employer_id,
+            employer_name: employer['name'],
             address: address,
             country: country,
             user: toUserDto(newUser)
