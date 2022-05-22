@@ -30,8 +30,12 @@ export class EmployerBenefitService {
         if (isEmployer(req) && !this.checkEmployerExist(req)) {
             return responseWithoutData(false, "Invalid Employer");
         }
+        let employer = await this.employerModel.findOne({user_id: req.user.data.id});
+        if (!employer) {
+            return responseWithoutData(false, "Employer doesn't exist");
+        }
         let employerBenefitsList = await this.employerBenefitModel.find({
-            employer_id: req.user.data.id
+            employer_id: employer.id
         });
         return responseWithData(true, "Employer Benefits Retreived Successfully.", employerBenefitsList.map(employerBenefits => toEmployerBenefitDto(employerBenefits)));
     }
@@ -42,7 +46,7 @@ export class EmployerBenefitService {
         }
         const {employer_id, benefits} = employerBenefitCreate;
         await this.employerBenefitModel.deleteOne({
-            employer_id: req.user.data.id,
+            employer_id: employer_id,
         });
         const newEmployerBenefit = new this.employerBenefitModel({
             employer_id: employer_id,
@@ -54,7 +58,7 @@ export class EmployerBenefitService {
 
     
     private async checkEmployerExist(req: any) {
-        const checkEmployer = await this.employerModel.findById(req.user.data.id);
+        const checkEmployer = await this.employerModel.findOne({user_id: req.user.data.id});
         if(checkEmployer) {
             return true;
         } else {

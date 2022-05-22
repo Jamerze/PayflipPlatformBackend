@@ -9,6 +9,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { EmployeeModule } from './employee/employee.module';
 import { BenefitModule } from './benefit/benefit.module';
 import { EmployerBenefitModule } from './employer-benefit/employer-benefit.module';
+import { BudgetModule } from './budget/budget.module';
+import { EmployeeBenefitModule } from './employee-benefit/employee-benefit.module';
+import { TotalBudgetModule } from './total-budget/total-budget.module';
 
 @Module({
   imports: [
@@ -19,7 +22,10 @@ import { EmployerBenefitModule } from './employer-benefit/employer-benefit.modul
     DashboardModule,
     EmployeeModule,
     BenefitModule,
-    EmployerBenefitModule
+    EmployerBenefitModule,
+    BudgetModule,
+    EmployeeBenefitModule,
+    TotalBudgetModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -20,6 +20,9 @@ export class Employer {
     @Prop()
     updatedOn?: Date;
 
+    @Prop()
+    user_id: string;
+
     @Prop({type: UserSchema})
     @Type(() => User)
     user: UserModel

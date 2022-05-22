@@ -9,7 +9,6 @@ import { EmployerModel } from 'src/employer/employer.model';
 import { toEmployeeDto, toUserDto } from 'src/shared/mapper';
 import { EmployeeCreateDto } from './dto/employee-create.dto';
 import { EmployeeDto } from './dto/employee.dto';
-import mongoose from 'mongoose';
 
 @Injectable()
 export class EmployeeService {
@@ -27,8 +26,12 @@ export class EmployeeService {
         if (isAdmin(req)) {
             employeesList = await this.employeeModel.find({ relations: ['user'] });
         } else {
+            let employer = await this.employerModel.findOne({ user_id: req.user.data.id });
+            if (!employer) {
+                return responseWithoutData(false, "Employer doesn't exist");
+            }
             employeesList = await this.employeeModel.find({
-                employer_id: req.user.data.id,
+                employer_id: employer.id,
                 relations: ['user']
             });
         }
@@ -42,17 +45,14 @@ export class EmployeeService {
         if (!id || id == "") {
             return responseWithoutData(false, "ID is missing.");
         }
-        let employee;  
+        let employee;
         try {
             employee = await this.employeeModel.findById(id);
         }
-        catch (err){
+        catch (err) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         if (!employee) {
-            return responseWithoutData(false, "Employee doesn't exist");
-        }
-        if (isEmployer(req) && employee && employee.employer_id != req.user.data.id) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         return responseWithData(true, "Data Retreived Successfully.", toEmployeeDto(employee));
@@ -76,15 +76,15 @@ export class EmployeeService {
         if (userInDb) {
             return responseWithoutData(false, "User already exists");
         }
-        let employer;  
+        let employer;
         try {
-            employer = await this.employerModel.findOne({_id: employer_id});
+            employer = await this.employerModel.findOne({ _id: employer_id });
         }
-        catch (err){
-            return responseWithoutData(false, "Employer doesn't exist zain");
+        catch (err) {
+            return responseWithoutData(false, "Employer doesn't exist");
         }
         if (!employer) {
-            return responseWithoutData(false, "Employer doesn't exist ali");
+            return responseWithoutData(false, "Employer doesn't exist");
         }
         const newUser = new this.userModel({
             name: name,
@@ -117,27 +117,27 @@ export class EmployeeService {
         if (!validation.success) {
             return validation;
         }
-        let employer;  
+        let employer;
         try {
-            employer = await this.employerModel.find({_id: employer_id});
+            employer = await this.employerModel.find({ _id: employer_id });
         }
-        catch (err){
+        catch (err) {
             return responseWithoutData(false, "Employer doesn't exist");
         }
         if (!employer) {
             return responseWithoutData(false, "Employer doesn't exist");
         }
-        let employee;  
+        let employee;
         try {
             employee = await this.employeeModel.findById(id);
         }
-        catch (err){
+        catch (err) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         if (!employee) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
-        if (isEmployer(req) && employee && employee.employer_id != req.user.data.id) {
+        if (isEmployer(req) && employee && employee.employer_id != employer_id) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         await this.employeeModel.updateOne({ _id: id }, {
@@ -165,17 +165,14 @@ export class EmployeeService {
         if (!id || id == "") {
             return responseWithoutData(false, "ID is missing.");
         }
-        let employee;  
+        let employee;
         try {
             employee = await this.employeeModel.findById(id);
         }
-        catch (err){
+        catch (err) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         if (!employee) {
-            return responseWithoutData(false, "Employee doesn't exist");
-        }
-        if (isEmployer(req) && employee && employee.employer_id != req.user.data.id) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         await this.employeeModel.deleteOne({
@@ -189,8 +186,8 @@ export class EmployeeService {
     }
 
     private async checkEmployerExist(req: any) {
-        const checkEmployer = await this.employerModel.findById(req.user.data.id);
-        if(checkEmployer) {
+        const checkEmployer = await this.employerModel.findOne({user_id: req.user.data.id});
+        if (checkEmployer) {
             return true;
         } else {
             return false;

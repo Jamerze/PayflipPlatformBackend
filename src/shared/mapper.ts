@@ -8,6 +8,12 @@ import { EmployerModel } from "src/employer/employer.model";
 import { UserDto } from "src/user/dto/user.dto";
 import { UserModel } from "src/user/user.model";
 import { EmployerBenefitDto } from "src/employer-benefit/dto/employer-benefit.dto";
+import { BudgetModel } from "src/budget/budget.model";
+import { BudgetDto } from "src/budget/dto/budget.dto";
+import { TotalBudget } from "src/total-budget/total-budget.model";
+import { TotalBudgetDto } from "src/total-budget/dto/budget.dto";
+import { EmployeeBenefitModel } from "src/employee-benefit/employee-benefit.model";
+import { EmployeeBenefitDto } from "src/employee-benefit/dto/employee-benefit.dto";
 
 export const toUserDto = (data: UserModel): UserDto => {
     const { id, name, email, country, role } = data;
@@ -38,4 +44,22 @@ export const toEmployerBenefitDto = (data: EmployerBenefitModel): EmployerBenefi
     const { id, employer_id, benefits } = data;
     let employerBenefitDto: EmployerBenefitDto = { id, employer_id, benefits };
     return employerBenefitDto;
+};
+
+export const toBudgetDto = (data: BudgetModel): BudgetDto => {
+    const { id, amount, budget_type, employer_id, employee_id, employee_name } = data;
+    let budgetDto: BudgetDto = { id, amount, budget_type, employer_id, employee_id, employee_name };
+    return budgetDto;
+};
+
+export const toTotalBudgetDto = (data: TotalBudget): TotalBudgetDto => {
+    const { amount } = data;
+    let totalBudgetDto: TotalBudgetDto = { amount};
+    return totalBudgetDto;
+};
+
+export const toEmployeeBenefitDto = (data: EmployeeBenefitModel): EmployeeBenefitDto => {
+    const { id, employee_id, benefit, date_added } = data;
+    let employeeBenefitDto: EmployeeBenefitDto = { id, employee_id, benefit: benefit ? toBenefitDto(benefit) : null, date_added };
+    return employeeBenefitDto;
 };

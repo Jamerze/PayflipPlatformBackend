@@ -255,3 +255,54 @@ export const checkBenefitUpdationValidation = (id: any, data: any) => {
         return responseWithoutData(true, "Data Validated");
     }
 }
+
+export const checkBudgetCreationValidation = (budget: any) => {
+    const { amount, budget_type, employee_id } = budget;
+    if (!amount || amount == "") {
+        return responseWithoutData(false, "Amount is required");
+    }
+    else if (!budget_type || budget_type == "") {
+        return responseWithoutData(false, "Budget Type is required.");
+    }
+    else if (!employee_id || employee_id == "") {
+        return responseWithoutData(false, "Employee ID is required.");
+    }
+    else {
+        return responseWithoutData(true, "Data Validated");
+    }
+}
+
+export const checkBudgetUpdationValidation = (id: any, budget: any) => {
+    const { amount, budget_type, employee_id } = budget;
+    if (!id || id == "") {
+        return responseWithoutData(false, "ID is missing");
+    }
+    else if (!amount || amount == "") {
+        return responseWithoutData(false, "Amount is required");
+    }
+    else if (!budget_type || budget_type == "") {
+        return responseWithoutData(false, "Budget Type is required.");
+    }
+    else if (!employee_id || employee_id == "") {
+        return responseWithoutData(false, "Employee ID is required.");
+    }
+    else {
+        return responseWithoutData(true, "Data Validated");
+    }
+}
+
+export const checkBuyBenefitValidation = (benefit: any) => {
+    const { employee_id, benefit_id, benefit_cost } = benefit;
+    if (!employee_id || employee_id == "") {
+        return responseWithoutData(false, "Employee ID is required");
+    }
+    else  if (!benefit_id || benefit_id == "") {
+        return responseWithoutData(false, "Benefit ID is required");
+    }
+    else if (!benefit_cost || benefit_cost == "") {
+        return responseWithoutData(false, "Benefit Cost is required.");
+    }
+    else {
+        return responseWithoutData(true, "Data Validated");
+    }
+}
