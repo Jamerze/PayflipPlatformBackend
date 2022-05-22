@@ -13,14 +13,14 @@ export class TotalBudgetService {
         @InjectModel("Employee") private employeeModel: Model<EmployeeModel>
     ) { }
 
-    async getBudget(req: any, id: any): Promise<any> {
-        let employee = await this.employeeModel.findById(id);
+    async getBudget(req: any): Promise<any> {
+        let employee = await this.employeeModel.findOne({user_id: req.user.data.id});
         if (!employee) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         let totalBudgetList;
         totalBudgetList = await this.totalBudgetModel.find({
-            employee_id: id
+            employee_id: employee.id
         });
         return responseWithData(true, "Data Retreived Successfully.", totalBudgetList.map(totalBudget => toTotalBudgetDto(totalBudget)));
     }

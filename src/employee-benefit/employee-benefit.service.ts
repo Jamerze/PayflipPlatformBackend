@@ -20,8 +20,8 @@ export class EmployeeBenefitService {
         @InjectModel("TotalBudget") private totalBudgetModel: Model<TotalBudgetModel>,
     ) { }
 
-    async getAvailableBenefits(req: any, id: any): Promise<any> {
-        let employee = await this.employeeModel.findById(id);
+    async getAvailableBenefits(req: any): Promise<any> {
+        let employee = await this.employeeModel.findOne({user_id: req.user.data.id});
         if (!employee) {
             return responseWithoutData(false, "Invalid Employee");
         }
@@ -32,12 +32,12 @@ export class EmployeeBenefitService {
     }
 
     async buyBenefit(req: any, employeeBenefitCreateDto: EmployeeBenefitCreateDto): Promise<any> {
-        const { employee_id, benefit_id, benefit_cost } = employeeBenefitCreateDto;
+        const { benefit_id, benefit_cost } = employeeBenefitCreateDto;
         let validation = checkBuyBenefitValidation(employeeBenefitCreateDto);
         if (!validation.success) {
             return validation;
         }
-        let employee = await this.employeeModel.findById(employee_id);
+        let employee = await this.employeeModel.findOne({user_id: req.user.data.id});
         if (!employee) {
             return responseWithoutData(false, "Invalid Employee");
         }
@@ -68,8 +68,8 @@ export class EmployeeBenefitService {
         return responseWithData(true, "Benefit Bought Successfully.", toEmployeeBenefitDto(newEmployeeBenefit));
     }
 
-    async getEmployeeBenefitsList(req: any, id: any): Promise<any> {
-        let employee = await this.employeeModel.findById(id);
+    async getEmployeeBenefitsList(req: any): Promise<any> {
+        let employee = await this.employeeModel.findOne({user_id: req.user.data.id});
         if (!employee) {
             return responseWithoutData(false, "Invalid Employee");
         }

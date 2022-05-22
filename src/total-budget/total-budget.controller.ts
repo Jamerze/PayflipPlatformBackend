@@ -10,10 +10,9 @@ export class TotalBudgetController {
     ) { }
 
     @UseGuards(JwtAuthGuard)
-    @Get(":id")
+    @Get()
     async findAll(
         @Req() req: any,
-        @Param("id") id: string
     ): Promise<any> {
         if(req.user.success == false){
             return req.user;
@@ -21,6 +20,6 @@ export class TotalBudgetController {
         if (!isEmployee(req)) {
             return notAuthorize();
         }
-        return await this.totalBudgetService.getBudget(req, id);
+        return await this.totalBudgetService.getBudget(req);
     }
 }

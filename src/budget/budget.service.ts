@@ -73,10 +73,10 @@ export class BudgetService {
             employee = await this.employeeModel.findOne({ _id: employee_id });
         }
         catch (err) {
-            return responseWithoutData(false, "Employee doesn't exist" + err);
+            return responseWithoutData(false, "Employee doesn't exist");
         }
         if (!employee) {
-            return responseWithoutData(false, "Employee doesn't exist" + employee);
+            return responseWithoutData(false, "Employee doesn't exist");
         }
         const newBudget = new this.budgetModel({
             amount: amount,

@@ -292,11 +292,8 @@ export const checkBudgetUpdationValidation = (id: any, budget: any) => {
 }
 
 export const checkBuyBenefitValidation = (benefit: any) => {
-    const { employee_id, benefit_id, benefit_cost } = benefit;
-    if (!employee_id || employee_id == "") {
-        return responseWithoutData(false, "Employee ID is required");
-    }
-    else  if (!benefit_id || benefit_id == "") {
+    const { benefit_id, benefit_cost } = benefit;
+    if (!benefit_id || benefit_id == "") {
         return responseWithoutData(false, "Benefit ID is required");
     }
     else if (!benefit_cost || benefit_cost == "") {

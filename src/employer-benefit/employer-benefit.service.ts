@@ -44,12 +44,16 @@ export class EmployerBenefitService {
         if (isEmployer(req) && !this.checkEmployerExist(req)) {
             return responseWithoutData(false, "Invalid Employer");
         }
-        const {employer_id, benefits} = employerBenefitCreate;
+        let employer = await this.employerModel.findOne({user_id: req.user.data.id});
+        if (!employer) {
+            return responseWithoutData(false, "Employer doesn't exist");
+        }
+        const {benefits} = employerBenefitCreate;
         await this.employerBenefitModel.deleteOne({
-            employer_id: employer_id,
+            employer_id: employer.id,
         });
         const newEmployerBenefit = new this.employerBenefitModel({
-            employer_id: employer_id,
+            employer_id: employer.id,
             benefits: benefits
         });
         await newEmployerBenefit.save();

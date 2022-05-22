@@ -11,10 +11,9 @@ export class EmployeeBenefitController {
     ) { }
 
     @UseGuards(JwtAuthGuard)
-    @Get("available-benefits/:employee_id")
+    @Get("available")
     async findAll(
-        @Req() req: any,
-        @Param("employee_id") employee_id: string
+        @Req() req: any
     ): Promise<any> {
         if(req.user.success == false){
             return req.user;
@@ -22,7 +21,7 @@ export class EmployeeBenefitController {
         if (!isEmployee(req)) {
             return notAuthorize();
         }
-        return await this.employeeBenefitService.getAvailableBenefits(req, employee_id);
+        return await this.employeeBenefitService.getAvailableBenefits(req);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -41,10 +40,9 @@ export class EmployeeBenefitController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get(":id")
+    @Get()
     async findOne(
         @Req() req: any,
-        @Param("id") id: string
     ): Promise<any> {
         if(req.user.success == false){
             return req.user;
@@ -52,6 +50,6 @@ export class EmployeeBenefitController {
         if (!isEmployee(req)) {
             return notAuthorize();
         }
-        return await this.employeeBenefitService.getEmployeeBenefitsList(req, id);
+        return await this.employeeBenefitService.getEmployeeBenefitsList(req);
     }
 }

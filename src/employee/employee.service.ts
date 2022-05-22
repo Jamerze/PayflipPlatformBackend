@@ -77,11 +77,22 @@ export class EmployeeService {
             return responseWithoutData(false, "User already exists");
         }
         let employer;
-        try {
-            employer = await this.employerModel.findOne({ _id: employer_id });
+        if (isAdmin(req)) {
+            try {
+                employer = await this.employerModel.findOne({ _id: employer_id });
+            }
+            catch (err) {
+                return responseWithoutData(false, "Employer doesn't exist");
+            }
+
         }
-        catch (err) {
-            return responseWithoutData(false, "Employer doesn't exist");
+        else {
+            try {
+                employer = await this.employerModel.findOne({ user_id: req.user.data.id });
+            }
+            catch (err) {
+                return responseWithoutData(false, "Employer doesn't exist");
+            }
         }
         if (!employer) {
             return responseWithoutData(false, "Employer doesn't exist");
@@ -98,8 +109,9 @@ export class EmployeeService {
             name: name,
             designation: designation,
             employement_type: employement_type,
-            employer_id: employer_id,
+            employer_id: employer['id'],
             employer_name: employer['name'],
+            user_id: newUser.id,
             address: address,
             country: country,
             user: toUserDto(newUser)
@@ -118,11 +130,22 @@ export class EmployeeService {
             return validation;
         }
         let employer;
-        try {
-            employer = await this.employerModel.find({ _id: employer_id });
+        if (isAdmin(req)) {
+            try {
+                employer = await this.employerModel.findOne({ _id: employer_id });
+            }
+            catch (err) {
+                return responseWithoutData(false, "Employer doesn't exist");
+            }
+
         }
-        catch (err) {
-            return responseWithoutData(false, "Employer doesn't exist");
+        else {
+            try {
+                employer = await this.employerModel.findOne({ user_id: req.user.data.id });
+            }
+            catch (err) {
+                return responseWithoutData(false, "Employer doesn't exist");
+            }
         }
         if (!employer) {
             return responseWithoutData(false, "Employer doesn't exist");
@@ -137,7 +160,7 @@ export class EmployeeService {
         if (!employee) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
-        if (isEmployer(req) && employee && employee.employer_id != employer_id) {
+        if (isEmployer(req) && employee && employee.employer_id != employer.id) {
             return responseWithoutData(false, "Employee doesn't exist");
         }
         await this.employeeModel.updateOne({ _id: id }, {
@@ -186,7 +209,7 @@ export class EmployeeService {
     }
 
     private async checkEmployerExist(req: any) {
-        const checkEmployer = await this.employerModel.findOne({user_id: req.user.data.id});
+        const checkEmployer = await this.employerModel.findOne({ user_id: req.user.data.id });
         if (checkEmployer) {
             return true;
         } else {
