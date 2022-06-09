@@ -19,9 +19,9 @@ export class BenefitController {
         if(req.user.success == false){
             return req.user;
         }
-        if (!isAdmin(req)) {
-            return notAuthorize();
-        }
+        // if (!isAdmin(req)) {
+        //     return notAuthorize();
+        // }
         return await this.benefitService.getAllBenefits();
     }
 

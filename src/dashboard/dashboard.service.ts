@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { BenefitModel } from 'src/benefit/benefit.model';
+import { EmployeeModel } from 'src/employee/employee.model';
 import { EmployerModel } from 'src/employer/employer.model';
 import { responseWithData } from 'src/shared/common-function';
 import { UserModel } from 'src/user/user.model';
@@ -9,14 +11,21 @@ import { UserModel } from 'src/user/user.model';
 export class DashboardService {
     constructor(
         @InjectModel("Employer") private employerModel: Model<EmployerModel>,
+        @InjectModel("Employee") private employeeModel: Model<EmployeeModel>,
+        @InjectModel("Benefit") private benefitModel: Model<BenefitModel>,
+        @InjectModel("User") private userModel: Model<UserModel>,
     ) { }
 
     async getAdminDashboard(): Promise<any> {
-        const employersList = await this.employerModel.count({ relations: ['user'] });
+        const employersCount = await this.employerModel.count();
+        const employeesCount = await this.employeeModel.count();
+        const benefitsCount = await this.benefitModel.count();
+        const usersCount = await this.userModel.count();
         let dashboardData = {
-            total_employers: employersList,
-            total_employees: 20,
-            total_salary_used: 2000
+            total_users: usersCount,
+            total_employers: employersCount,
+            total_employees: employeesCount,
+            total_benefits: benefitsCount
         };
         return responseWithData(true, "Data Retreived Successfully.", dashboardData);
     }
