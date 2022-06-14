@@ -9,13 +9,13 @@ import { EmployerBenefitCreateDto } from './dto/employer-benefit.create.dto';
 import { EmployerBenefitModel } from './employer-benefit.model';
 
 @Injectable()
-export class EmployerBenefitService { 
+export class EmployerBenefitService {
     constructor(
         @InjectModel("Benefit") private benefitModel: Model<BenefitModel>,
         @InjectModel("Employer") private employerModel: Model<EmployerModel>,
         @InjectModel("EmployerBenefit") private employerBenefitModel: Model<EmployerBenefitModel>,
     ) { }
-    
+
     async getEmployersCountryBenefits(req: any): Promise<any> {
         if (isEmployer(req) && !this.checkEmployerExist(req)) {
             return responseWithoutData(false, "Invalid Employer");
@@ -30,7 +30,7 @@ export class EmployerBenefitService {
         if (isEmployer(req) && !this.checkEmployerExist(req)) {
             return responseWithoutData(false, "Invalid Employer");
         }
-        let employer = await this.employerModel.findOne({user_id: req.user.data.id});
+        let employer = await this.employerModel.findOne({ user_id: req.user.data.id });
         if (!employer) {
             return responseWithoutData(false, "Employer doesn't exist");
         }
@@ -44,26 +44,62 @@ export class EmployerBenefitService {
         if (isEmployer(req) && !this.checkEmployerExist(req)) {
             return responseWithoutData(false, "Invalid Employer");
         }
-        let employer = await this.employerModel.findOne({user_id: req.user.data.id});
+        let employer = await this.employerModel.findOne({ user_id: req.user.data.id });
         if (!employer) {
             return responseWithoutData(false, "Employer doesn't exist");
         }
-        const {benefits} = employerBenefitCreate;
-        await this.employerBenefitModel.deleteOne({
-            employer_id: employer.id,
-        });
+        const { benefit_id } = employerBenefitCreate;
+        let benefit = await this.benefitModel.findOne({ _id: benefit_id });
+        if (!benefit) {
+            return responseWithoutData(false, "Benefit doesn't exist");
+        }
         const newEmployerBenefit = new this.employerBenefitModel({
             employer_id: employer.id,
-            benefits: benefits
+            benefit_id: benefit_id,
+            benefit_name: benefit.name,
+            benefit_cost: benefit.cost,
+            benefit_description: benefit.description,
         });
         await newEmployerBenefit.save();
         return responseWithData(true, "Employer Benefits Added Successfully", toEmployerBenefitDto(newEmployerBenefit));
     }
 
-    
+    async destoryEmployerBenefit(req: any, id: string): Promise<any> {
+        if (isEmployer(req) && !this.checkEmployerExist(req)) {
+            return responseWithoutData(false, "Invalid Employer");
+        }
+        if (!id || id == "") {
+            return responseWithoutData(false, "ID is missing.");
+        }
+        let employer;
+        try {
+            employer = await this.employerModel.findOne({ user_id: req.user.data.id });
+        }
+        catch (err) {
+            return responseWithoutData(false, "Employer doesn't exist");
+        }
+        if (!employer) {
+            return responseWithoutData(false, "Employer doesn't exist");
+        }
+        let employerBenefit;
+        try {
+            employerBenefit = await this.employerBenefitModel.findById(id);
+        }
+        catch (err) {
+            return responseWithoutData(false, "Employer Benefit doesn't exist");
+        }
+        if (!employerBenefit) {
+            return responseWithoutData(false, "Employer Benefit doesn't exist");
+        }
+        await this.employerBenefitModel.deleteOne({
+            _id: id,
+        });
+        return responseWithoutData(true, "Employer Benefit Deleted Successfully");
+    }
+
     private async checkEmployerExist(req: any) {
-        const checkEmployer = await this.employerModel.findOne({user_id: req.user.data.id});
-        if(checkEmployer) {
+        const checkEmployer = await this.employerModel.findOne({ user_id: req.user.data.id });
+        if (checkEmployer) {
             return true;
         } else {
             return false;

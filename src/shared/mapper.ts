@@ -41,8 +41,8 @@ export const toBenefitDto = (data: BenefitModel): BenefitDto => {
 
 
 export const toEmployerBenefitDto = (data: EmployerBenefitModel): EmployerBenefitDto => {
-    const { id, employer_id, benefits } = data;
-    let employerBenefitDto: EmployerBenefitDto = { id, employer_id, benefits };
+    const { id, employer_id, benefit_id, benefit_name, benefit_cost, benefit_description } = data;
+    let employerBenefitDto: EmployerBenefitDto = { id, employer_id, benefit_id, benefit_name, benefit_cost, benefit_description };
     return employerBenefitDto;
 };
 

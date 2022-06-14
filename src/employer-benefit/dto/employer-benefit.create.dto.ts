@@ -1,3 +1,3 @@
 export class EmployerBenefitCreateDto {  
-    benefits: string[];
+    benefit_id: string;
 }

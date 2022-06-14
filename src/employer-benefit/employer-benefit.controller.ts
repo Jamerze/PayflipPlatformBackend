@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
 import { isEmployer, notAuthorize } from 'src/shared/common-function';
 import { EmployerBenefitCreateDto } from './dto/employer-benefit.create.dto';
@@ -51,5 +51,20 @@ export class EmployerBenefitController {
             return notAuthorize();
         }
         return await this.employerBenefitService.addEmployerBenefits(req, employerBenefitCreateDto);
+    }
+    
+    @UseGuards(JwtAuthGuard)
+    @Delete(":id")
+    async destory(
+        @Req() req: any,
+        @Param("id") id: string
+    ): Promise<any> {
+        if(req.user.success == false){
+            return req.user;
+        }
+        if (!isEmployer(req)) {
+            return notAuthorize();
+        }
+        return await this.employerBenefitService.destoryEmployerBenefit(req, id);
     }
 }

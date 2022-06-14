@@ -41,12 +41,8 @@ export class DashboardService {
         }
         const employeesCount = await this.employeeModel.count({employer_id: employer.id});
         const countryBenefitsCount = await this.benefitModel.count({country: employer.country});
-        const employerBenefit = await this.employerBenefitModel.findOne({employer_id: employer.id});
+        const employerBenefitsCount = await this.employerBenefitModel.count({employer_id: employer.id});
         const employerTotalBudgetAssigned= await this.budgetModel.count({employer_id: employer.id});
-        let employerBenefitsCount = 0;
-        if(employerBenefit){
-            employerBenefitsCount = employerBenefit.benefits.length;
-        }
         let dashboardData = {
             total_country_benefits: countryBenefitsCount,
             total_employees: employeesCount,
