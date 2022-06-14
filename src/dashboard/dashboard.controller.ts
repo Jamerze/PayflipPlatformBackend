@@ -20,7 +20,7 @@ export class DashboardController {
         if (isAdmin(req)) {
             return await this.dashboardService.getAdminDashboard();
         } else if (isEmployer(req)) {
-            return await this.dashboardService.getEmployerDashboard();
+            return await this.dashboardService.getEmployerDashboard(req);
         } else if (isEmployee(req)) {
             return await this.dashboardService.getEmployeeDashboard();
         } else {
