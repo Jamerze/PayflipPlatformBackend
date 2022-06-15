@@ -13,6 +13,9 @@ export class Employee {
     employer_id: string;
     
     @Prop()
+    user_id: string;
+    
+    @Prop()
     employer_name: string;
 
     @Prop()
