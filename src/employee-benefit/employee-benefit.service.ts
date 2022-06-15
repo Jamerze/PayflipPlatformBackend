@@ -32,7 +32,7 @@ export class EmployeeBenefitService {
     }
 
     async buyBenefit(req: any, employeeBenefitCreateDto: EmployeeBenefitCreateDto): Promise<any> {
-        const { benefit_id, benefit_cost } = employeeBenefitCreateDto;
+        const { benefit_id } = employeeBenefitCreateDto;
         let validation = checkBuyBenefitValidation(employeeBenefitCreateDto);
         if (!validation.success) {
             return validation;
@@ -52,16 +52,19 @@ export class EmployeeBenefitService {
             return responseWithoutData(false, "Benefit doesn't exist");
         }
         const getEmployeeTotalBudget = await this.totalBudgetModel.findOne({ employee_id: employee.id });
-        if (getEmployeeTotalBudget && (parseInt(getEmployeeTotalBudget.amount) < parseInt(benefit_cost))) {
+        if (getEmployeeTotalBudget && (parseInt(getEmployeeTotalBudget.amount) < parseInt(benefit.cost))) {
             return responseWithoutData(false, "Not enough budget to buy this benefit");
         }
         const newEmployeeBenefit = new this.employeeBenefitModel({
             employee_id: employee.id,
-            benefit: benefit,
+            benefit_id: benefit_id,
+            benefit_name: benefit.name,
+            benefit_cost: benefit.cost,
+            benefit_description: benefit.description,
             date_added: Date.now()
         });
         await newEmployeeBenefit.save();
-        let totalBudgetAmount = parseInt(getEmployeeTotalBudget.amount) - parseInt(benefit_cost);
+        let totalBudgetAmount = parseInt(getEmployeeTotalBudget.amount) - parseInt(benefit.cost);
         await this.totalBudgetModel.updateOne({ employee_id: employee.id }, {
             amount: totalBudgetAmount,
         });

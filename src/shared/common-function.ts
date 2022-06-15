@@ -292,12 +292,9 @@ export const checkBudgetUpdationValidation = (id: any, budget: any) => {
 }
 
 export const checkBuyBenefitValidation = (benefit: any) => {
-    const { benefit_id, benefit_cost } = benefit;
+    const { benefit_id } = benefit;
     if (!benefit_id || benefit_id == "") {
         return responseWithoutData(false, "Benefit ID is required");
-    }
-    else if (!benefit_cost || benefit_cost == "") {
-        return responseWithoutData(false, "Benefit Cost is required.");
     }
     else {
         return responseWithoutData(true, "Data Validated");

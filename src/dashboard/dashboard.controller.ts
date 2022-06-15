@@ -22,7 +22,7 @@ export class DashboardController {
         } else if (isEmployer(req)) {
             return await this.dashboardService.getEmployerDashboard(req);
         } else if (isEmployee(req)) {
-            return await this.dashboardService.getEmployeeDashboard();
+            return await this.dashboardService.getEmployeeDashboard(req);
         } else {
             return responseWithoutData(false, "Unauthorized")
         }

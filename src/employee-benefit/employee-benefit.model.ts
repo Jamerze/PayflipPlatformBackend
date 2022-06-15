@@ -8,9 +8,17 @@ export class EmployeeBenefit {
     @Prop()
     employee_id: string;
     
-    @Prop({type: BenefitSchema})
-    @Type(() => Benefit)
-    benefit: BenefitModel
+    @Prop()
+    benefit_id: string;
+
+    @Prop()
+    benefit_name: string;
+    
+    @Prop()
+    benefit_cost: string;
+
+    @Prop()
+    benefit_description: string;
     
     @Prop()
     date_added: Date;
