@@ -21,7 +21,7 @@ export class EmployeeBenefitService {
     ) { }
 
     async getAvailableBenefits(req: any): Promise<any> {
-        let employee = await this.employeeModel.findOne({user_id: req.user.data.id});
+        let employee = await this.employeeModel.findOne({ user_id: req.user.data.id });
         if (!employee) {
             return responseWithoutData(false, "Invalid Employee");
         }
@@ -37,7 +37,7 @@ export class EmployeeBenefitService {
         if (!validation.success) {
             return validation;
         }
-        let employee = await this.employeeModel.findOne({user_id: req.user.data.id});
+        let employee = await this.employeeModel.findOne({ user_id: req.user.data.id });
         if (!employee) {
             return responseWithoutData(false, "Invalid Employee");
         }
@@ -52,7 +52,7 @@ export class EmployeeBenefitService {
             return responseWithoutData(false, "Benefit doesn't exist");
         }
         const getEmployeeTotalBudget = await this.totalBudgetModel.findOne({ employee_id: employee.id });
-        if (getEmployeeTotalBudget && (parseInt(getEmployeeTotalBudget.amount) < parseInt(benefit.cost))) {
+        if (!getEmployeeTotalBudget || (getEmployeeTotalBudget && (parseInt(getEmployeeTotalBudget.amount) < parseInt(benefit.cost)))) {
             return responseWithoutData(false, "Not enough budget to buy this benefit");
         }
         const newEmployeeBenefit = new this.employeeBenefitModel({
@@ -72,7 +72,7 @@ export class EmployeeBenefitService {
     }
 
     async getEmployeeBenefitsList(req: any): Promise<any> {
-        let employee = await this.employeeModel.findOne({user_id: req.user.data.id});
+        let employee = await this.employeeModel.findOne({ user_id: req.user.data.id });
         if (!employee) {
             return responseWithoutData(false, "Invalid Employee");
         }
