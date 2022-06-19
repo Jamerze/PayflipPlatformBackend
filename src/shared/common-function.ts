@@ -216,7 +216,7 @@ export const checkEmployeeUpdationValidation = (id: any, employee: any) => {
 }
 
 export const checkBenefitValidation = (data: any) => {
-    const { name, cost, country, description } = data;
+    const { name, cost, country, description, imageUrl } = data;
     if (!name || name == "") {
         return responseWithoutData(false, "Name is required");
     }
@@ -229,13 +229,16 @@ export const checkBenefitValidation = (data: any) => {
     else if (!description || description == "") {
         return responseWithoutData(false, "Description is required.");
     }
+    else if (!imageUrl || imageUrl == "") {
+        return responseWithoutData(false, "Benefit Image Url is required.");
+    }
     else {
         return responseWithoutData(true, "Data Validated");
     }
 }
 
 export const checkBenefitUpdationValidation = (id: any, data: any) => {
-    const { name, cost, country, description } = data;
+    const { name, cost, country, description, imageUrl } = data;
     if (!id || id == "") {
         return responseWithoutData(false, "ID is missing");
     }
@@ -250,6 +253,9 @@ export const checkBenefitUpdationValidation = (id: any, data: any) => {
     }
     else if (!description || description == "") {
         return responseWithoutData(false, "Description is required.");
+    }
+    else if (!imageUrl || imageUrl == "") {
+        return responseWithoutData(false, "Benefit Image Url is required.");
     }
     else {
         return responseWithoutData(true, "Data Validated");

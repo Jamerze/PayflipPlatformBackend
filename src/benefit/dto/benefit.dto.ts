@@ -4,6 +4,7 @@ export class BenefitDto {
     cost: string;
     country?: string;
     description?: string;
+    imageUrl?: string;
     createdOn?: Date;
     updatedOn?: Date;
 }

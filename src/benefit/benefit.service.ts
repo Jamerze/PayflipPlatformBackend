@@ -38,7 +38,7 @@ export class BenefitService {
     async createBenefit(
         createBenefitDto: BenefitCreateDto
     ): Promise<any> {
-        const { name, cost, country, description } = createBenefitDto;
+        const { name, cost, country, description, imageUrl } = createBenefitDto;
         let validation = checkBenefitValidation(createBenefitDto);
         if (!validation.success) {
             return validation;
@@ -48,13 +48,14 @@ export class BenefitService {
             cost: cost,
             country: country,
             description: description,
+            imageUrl: imageUrl
         });
         await newBenefit.save();
         return responseWithData(true, "Benefit Created Successfully", toBenefitDto(newBenefit));
     }
 
     async updateBenefit(id: string, benefitDto: BenefitDto): Promise<any> {
-        const { name, cost, country, description } = benefitDto;
+        const { name, cost, country, description, imageUrl } = benefitDto;
         let validation = checkBenefitUpdationValidation(id, benefitDto);
         if (!validation.success) {
             return validation;
@@ -74,6 +75,7 @@ export class BenefitService {
             cost: cost,
             country: country,
             description: description,
+            imageUrl: imageUrl,
         });
 
         benefit = await this.benefitModel.findById(id);

@@ -3,4 +3,5 @@ export class BenefitCreateDto {
     cost: string;
     country?: string;
     description?: string;
+    imageUrl?: string;
 }
