@@ -20,7 +20,7 @@ export class EmployerService {
     ) { }
 
     async getAllEmployer(): Promise<any> {
-        const employersList = await this.employerModel.find({ relations: ['user'] });
+        const employersList = await this.employerModel.find({ relations: ['user'] }).sort({"_id":-1});
         return responseWithData(true, "Data Retreived Successfully.", employersList.map(employer => toEmployerDto(employer)));
     }
 

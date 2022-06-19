@@ -24,7 +24,7 @@ export class EmployeeService {
         }
         let employeesList;
         if (isAdmin(req)) {
-            employeesList = await this.employeeModel.find({ relations: ['user'] });
+            employeesList = await this.employeeModel.find({ relations: ['user'] }).sort({"_id":-1});
         } else {
             let employer = await this.employerModel.findOne({ user_id: req.user.data.id });
             if (!employer) {
@@ -33,7 +33,7 @@ export class EmployeeService {
             employeesList = await this.employeeModel.find({
                 employer_id: employer.id,
                 relations: ['user']
-            });
+            }).sort({"_id":-1});
         }
         return responseWithData(true, "Data Retreived Successfully.", employeesList.map(employee => toEmployeeDto(employee)));
     }

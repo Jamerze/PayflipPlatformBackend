@@ -32,7 +32,7 @@ export class BudgetService {
         budgetList = await this.budgetModel.find({
             employer_id: employer.id,
             relations: ['employee']
-        });
+        }).sort({"_id":-1});
         return responseWithData(true, "Data Retreived Successfully.", budgetList.map(budget => toBudgetDto(budget)));
     }
 

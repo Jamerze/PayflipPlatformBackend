@@ -22,7 +22,7 @@ export class EmployerBenefitService {
         }
         let benefitsList = await this.benefitModel.find({
             country: req.user.data.country
-        });
+        }).sort({"_id":-1});
         return responseWithData(true, "Benefits Retreived Successfully.", benefitsList.map(benefit => toBenefitDto(benefit)));
     }
 
@@ -36,7 +36,7 @@ export class EmployerBenefitService {
         }
         let employerBenefitsList = await this.employerBenefitModel.find({
             employer_id: employer.id
-        });
+        }).sort({"_id":-1});
         return responseWithData(true, "Employer Benefits Retreived Successfully.", employerBenefitsList.map(employerBenefits => toEmployerBenefitDto(employerBenefits)));
     }
 

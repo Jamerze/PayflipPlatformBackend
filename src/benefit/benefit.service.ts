@@ -14,7 +14,7 @@ export class BenefitService {
     ) { }
 
     async getAllBenefits(): Promise<any> {
-        const benefitsList = await this.benefitModel.find();
+        const benefitsList = await this.benefitModel.find().sort({"_id":-1});
         return responseWithData(true, "Data Retreived Successfully.", benefitsList.map(benefit => toBenefitDto(benefit)));
     }
 

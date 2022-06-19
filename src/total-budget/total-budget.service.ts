@@ -21,7 +21,7 @@ export class TotalBudgetService {
         let totalBudgetList;
         totalBudgetList = await this.totalBudgetModel.find({
             employee_id: employee.id
-        });
+        }).sort({"_id":-1});
         return responseWithData(true, "Data Retreived Successfully.", totalBudgetList.map(totalBudget => toTotalBudgetDto(totalBudget)));
     }
 }

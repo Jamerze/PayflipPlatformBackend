@@ -27,7 +27,7 @@ export class EmployeeBenefitService {
         }
         let benefitsList = await this.employerBenefitModel.find({
             employer_id: employee.employer_id
-        });
+        }).sort({"_id":-1});
         return responseWithData(true, "Benefits Retreived Successfully.", benefitsList.map(employerBenefits => toEmployerBenefitDto(employerBenefits)));
     }
 
@@ -78,7 +78,7 @@ export class EmployeeBenefitService {
         }
         let benefitsList = await this.employeeBenefitModel.find({
             employee_id: employee.id
-        });
+        }).sort({"_id":-1});
         return responseWithData(true, "Employee Benefits Retreived Successfully.", benefitsList.map(employeeBenefits => toEmployeeBenefitDto(employeeBenefits)));
     }
 }
