@@ -55,13 +55,17 @@ export class EmployeeBenefitService {
         if (!getEmployeeTotalBudget || (getEmployeeTotalBudget && (parseInt(getEmployeeTotalBudget.amount) < parseInt(benefit.cost)))) {
             return responseWithoutData(false, "Not enough budget to buy this benefit");
         }
+        let imageUrl = `${process.env.REACT_APP_BASE_URL}/default.png`;
+        if(benefit && benefit.imageUrl){
+            imageUrl = benefit.imageUrl
+        }
         const newEmployeeBenefit = new this.employeeBenefitModel({
             employee_id: employee.id,
             benefit_id: benefit_id,
             benefit_name: benefit.name,
             benefit_cost: benefit.cost,
             benefit_description: benefit.description,
-            imageUrl: benefit.imageUrl,
+            imageUrl: imageUrl,
             date_added: Date.now()
         });
         await newEmployeeBenefit.save();

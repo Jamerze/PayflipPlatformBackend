@@ -53,13 +53,17 @@ export class EmployerBenefitService {
         if (!benefit) {
             return responseWithoutData(false, "Benefit doesn't exist");
         }
+        let imageUrl = `${process.env.REACT_APP_BASE_URL}/default.png`;
+        if(benefit && benefit.imageUrl){
+            imageUrl = benefit.imageUrl
+        }
         const newEmployerBenefit = new this.employerBenefitModel({
             employer_id: employer.id,
             benefit_id: benefit_id,
             benefit_name: benefit.name,
             benefit_cost: benefit.cost,
             benefit_description: benefit.description,
-            imageUrl: benefit.imageUrl
+            imageUrl: imageUrl
         });
         await newEmployerBenefit.save();
         return responseWithData(true, "Employer Benefits Added Successfully", toEmployerBenefitDto(newEmployerBenefit));
