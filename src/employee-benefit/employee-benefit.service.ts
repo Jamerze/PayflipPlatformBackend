@@ -61,6 +61,7 @@ export class EmployeeBenefitService {
             benefit_name: benefit.name,
             benefit_cost: benefit.cost,
             benefit_description: benefit.description,
+            imageUrl: benefit.imageUrl,
             date_added: Date.now()
         });
         await newEmployeeBenefit.save();

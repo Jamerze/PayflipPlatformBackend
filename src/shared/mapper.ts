@@ -41,8 +41,8 @@ export const toBenefitDto = (data: BenefitModel): BenefitDto => {
 
 
 export const toEmployerBenefitDto = (data: EmployerBenefitModel): EmployerBenefitDto => {
-    const { id, employer_id, benefit_id, benefit_name, benefit_cost, benefit_description } = data;
-    let employerBenefitDto: EmployerBenefitDto = { id, employer_id, benefit_id, benefit_name, benefit_cost, benefit_description };
+    const { id, employer_id, benefit_id, benefit_name, benefit_cost, benefit_description, imageUrl } = data;
+    let employerBenefitDto: EmployerBenefitDto = { id, employer_id, benefit_id, benefit_name, benefit_cost, benefit_description, imageUrl };
     return employerBenefitDto;
 };
 
@@ -59,7 +59,7 @@ export const toTotalBudgetDto = (data: TotalBudget): TotalBudgetDto => {
 };
 
 export const toEmployeeBenefitDto = (data: EmployeeBenefitModel): EmployeeBenefitDto => {
-    const { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, date_added } = data;
-    let employeeBenefitDto: EmployeeBenefitDto = { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, date_added };
+    const { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, imageUrl, date_added } = data;
+    let employeeBenefitDto: EmployeeBenefitDto = { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, imageUrl, date_added };
     return employeeBenefitDto;
 };
