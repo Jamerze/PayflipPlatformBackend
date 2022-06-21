@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from 'mongoose';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 @Schema()
 export class Benefit {
@@ -17,7 +15,7 @@ export class Benefit {
     @Prop()
     description?: string;
 
-    @Prop({default: `${process.env.REACT_APP_BASE_URL}/default.png`})
+    @Prop({default: "https://media.idownloadblog.com/wp-content/uploads/2017/10/iphone-8-mockup-downloadable.jpg"})
     imageUrl?: string;
     
     @Prop()

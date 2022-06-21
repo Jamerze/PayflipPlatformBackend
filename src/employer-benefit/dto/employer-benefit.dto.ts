@@ -7,5 +7,4 @@ export class EmployerBenefitDto {
     benefit_name: string;
     benefit_cost: string;
     benefit_description: string;
-    imageUrl?: string
 }

@@ -63,7 +63,6 @@ export class EmployerBenefitService {
             benefit_name: benefit.name,
             benefit_cost: benefit.cost,
             benefit_description: benefit.description,
-            imageUrl: imageUrl
         });
         await newEmployerBenefit.save();
         return responseWithData(true, "Employer Benefits Added Successfully", toEmployerBenefitDto(newEmployerBenefit));

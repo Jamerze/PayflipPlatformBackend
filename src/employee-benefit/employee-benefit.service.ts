@@ -65,8 +65,7 @@ export class EmployeeBenefitService {
             benefit_name: benefit.name,
             benefit_cost: benefit.cost,
             benefit_description: benefit.description,
-            imageUrl: imageUrl,
-            date_added: new Date(Date.now())
+            date_added: Date.now()
         });
         await newEmployeeBenefit.save();
         let totalBudgetAmount = parseInt(getEmployeeTotalBudget.amount) - parseInt(benefit.cost);
