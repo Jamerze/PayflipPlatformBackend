@@ -7,5 +7,6 @@ export class EmployeeBenefitDto {
     benefit_name: string;
     benefit_cost: string;
     benefit_description: string;
+    imageUrl: string;
     date_added: Date
 }
