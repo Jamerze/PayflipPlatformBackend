@@ -59,7 +59,7 @@ export const toTotalBudgetDto = (data: TotalBudget): TotalBudgetDto => {
 };
 
 export const toEmployeeBenefitDto = (data: EmployeeBenefitModel): EmployeeBenefitDto => {
-    const { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, image_url, date_added } = data;
-    let employeeBenefitDto: EmployeeBenefitDto = { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, image_url, date_added };
+    const { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, date_added } = data;
+    let employeeBenefitDto: EmployeeBenefitDto = { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, date_added };
     return employeeBenefitDto;
 };

@@ -20,8 +20,8 @@ export class EmployeeBenefit {
     @Prop()
     benefit_description: string;
     
-    @Prop({default: `${process.env.REACT_APP_BASE_URL}/default.png`})
-    image_url: string;
+    // @Prop({default: `${process.env.REACT_APP_BASE_URL}/default.png`})
+    // image_url: string;
     
     @Prop()
     date_added: Date;
