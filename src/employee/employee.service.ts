@@ -114,7 +114,7 @@ export class EmployeeService {
             user_id: newUser.id,
             address: address,
             country: country,
-            user: toUserDto(newUser)
+            user: newUser
         })
         await newEmployee.save();
         return responseWithData(true, "Employee Created Successfully", toEmployeeDto(newEmployee));
