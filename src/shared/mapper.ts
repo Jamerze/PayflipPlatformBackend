@@ -22,13 +22,13 @@ export const toUserDto = (data: UserModel): UserDto => {
 };
 
 export const toEmployerDto = (data: EmployerModel): EmployerDto => {
-    const { id, name, address, country, user } = data;
+    const { id, name, user_id, address, country, user } = data;
     let employerDto: EmployerDto = { id, name, address, country, user: user ? toUserDto(user) : null };
     return employerDto;
 };
 
 export const toEmployeeDto = (data: EmployeeModel): EmployeeDto => {
-    const { id, name, employer_id, employer_name, designation, employement_type, address, country, user } = data;
+    const { id, name, employer_id, user_id, employer_name, designation, employement_type, address, country, user } = data;
     let employeeDto: EmployeeDto = { id, name, employer_id, employer_name, designation, employement_type, address, country, user: user ? toUserDto(user) : null };
     return employeeDto;
 };
@@ -59,7 +59,7 @@ export const toTotalBudgetDto = (data: TotalBudget): TotalBudgetDto => {
 };
 
 export const toEmployeeBenefitDto = (data: EmployeeBenefitModel): EmployeeBenefitDto => {
-    const { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, date_added } = data;
-    let employeeBenefitDto: EmployeeBenefitDto = { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, date_added };
+    const { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, imageUrl, date_added } = data;
+    let employeeBenefitDto: EmployeeBenefitDto = { id, employee_id, benefit_id, benefit_name, benefit_cost, benefit_description, imageUrl, date_added };
     return employeeBenefitDto;
 };

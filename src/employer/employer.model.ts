@@ -9,6 +9,9 @@ export class Employer {
     name: string;
     
     @Prop()
+    user_id: string;
+    
+    @Prop()
     address?: string;
     
     @Prop()
@@ -19,9 +22,6 @@ export class Employer {
 
     @Prop()
     updatedOn?: Date;
-
-    @Prop()
-    user_id: string;
 
     @Prop({type: UserSchema})
     @Type(() => User)

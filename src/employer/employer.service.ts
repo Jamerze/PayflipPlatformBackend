@@ -65,9 +65,9 @@ export class EmployerService {
         await newUser.save();
         const newEmployer = new this.employerModel({
             name: company_name,
+            user_id: newUser.id,
             address: address,
             country: country,
-            user_id: newUser.id,
             user: toUserDto(newUser)
         })
         await newEmployer.save();
