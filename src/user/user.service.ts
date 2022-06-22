@@ -69,6 +69,7 @@ export class UserService {
             name: company_name,
             address: address,
             country: country,
+            user_id: newUser.id,
             user: toUserDto(newUser)
         })
         await newEmployer.save();
